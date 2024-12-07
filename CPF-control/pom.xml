@@ -30,6 +30,28 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.openliberty.features</groupId>
+			<artifactId>jpa</artifactId>
+			<version>24.0.0.12</version>
+			<type>esa</type>
+		</dependency>
+
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -51,7 +73,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+	
+   <dependency>
+     <groupId>org.apache.commons</groupId>
+     <artifactId>commons-math3</artifactId>
+     <version>3.6.1</version>
+   </dependency>
+ </dependencies>
 
 	<build>
 		<plugins>

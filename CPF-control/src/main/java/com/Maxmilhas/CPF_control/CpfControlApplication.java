@@ -9,5 +9,4 @@ public class CpfControlApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CpfControlApplication.class, args);
 	}
-
 }
