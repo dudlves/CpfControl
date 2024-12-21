@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface Repositorio extends CrudRepository<User, Integer> {
   void save(String cpf);
   Optional<User> findByCpf(String cpf);
+  
 }
