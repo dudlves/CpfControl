@@ -3,14 +3,20 @@ package com.Maxmilhas.CPF_control.controller;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.Maxmilhas.CPF_control.domain.User;
 import com.Maxmilhas.CPF_control.repositorio.Repositorio;
 import com.Maxmilhas.CPF_control.service.CpfService;
@@ -51,7 +57,7 @@ public class CpfController {
     }
   }
 
-  @PostMapping("/{cpf}")
+  @GetMapping("/{cpf}")
   public ResponseEntity<String> handleCpf(@PathVariable String cpf) {
     Optional<User> user = repositorio.findByCpf(cpf);
     try{
@@ -74,5 +80,34 @@ public class CpfController {
       super(message);
     }
   }
+  @DeleteMapping("/{cpf}")
+  public ResponseEntity<String> deleteCpf(@PathVariable String cpf) {
+    Optional<User> user = repositorio.findByCpf(cpf);
+    try {
+      if (user.isPresent()) {
+        repositorio.delete(user.get());
+        return ResponseEntity.ok("CPF " + cpf + " removido com sucesso.");
+      } else {
+        throw new NotFoundCpfException(cpf + " não encontrado.");
+      }
+    } catch (NotFoundCpfException e) {
+      return ResponseEntity.status(404).body("Erro: " + e.getMessage());
+    }
+  }
+  @GetMapping
+  public ResponseEntity<List<Object>> getAllCpfs() {
+    List<User> users = new ArrayList<>();
+    repositorio.findAll().forEach(users::add);
+    List<Object> cpfs = users.stream()
+        .map(user -> {
+          return new Object() {
+            public final String cpf = user.getCpf();
+            public final String createdAt = user.getCreatedAt().atZone(java.time.ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME);
+          };
+        })
+        .collect(Collectors.toList());
+    return ResponseEntity.ok(cpfs);
+  }
+
 }
 
